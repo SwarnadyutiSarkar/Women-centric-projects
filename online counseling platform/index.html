@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Online Counseling Platform</title>
+</head>
+<body>
+  <h1>Welcome to Online Counseling Platform</h1>
+  <form id="counselingForm">
+    <label for="clientName">Your Name:</label>
+    <input type="text" id="clientName" name="clientName" required><br><br>
+    <label for="counselorName">Counselor's Name:</label>
+    <input type="text" id="counselorName" name="counselorName" required><br><br>
+    <label for="dateTime">Date & Time:</label>
+    <input type="datetime-local" id="dateTime" name="dateTime" required><br><br>
+    <label for="sessionDetails">Session Details:</label><br>
+    <textarea id="sessionDetails" name="sessionDetails" rows="4" cols="50" required></textarea><br><br>
+    <button type="submit">Book Counseling Session</button>
+  </form>
+  <div id="message"></div>
+
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script>
+    document.getElementById('counselingForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const form = e.target;
+      const formData = new FormData(form);
+      const jsonData = {};
+      formData.forEach((value, key) => { jsonData[key] = value });
+
+      try {
+        const response = await axios.post('/counseling', jsonData);
+        document.getElementById('message').textContent = response.data.message;
+        form.reset();
+      } catch (error) {
+        console.error('Error:', error);
+        document.getElementById('message').textContent = 'Error booking counseling session. Please try again later.';
+      }
+    });
+  </script>
+</body>
+</html>
